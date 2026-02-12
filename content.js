@@ -28,17 +28,13 @@ function createPanel() {
     button_home.textContent = "🏠︎";
     
     button_home.onclick = ()  => {
-        const ua = navigator.userAgent;
-
-        if (ua.includes('YaBrowser')) {
-            window.location.href = HOME_PAGES.yandex;
-        }
-        else if (ua.includes("Edg")) {
-            window.location.href = HOME_PAGES.edge;
-        }
-        else {
-            window.location.href = HOME_PAGES.chrome;
-        }
+        chrome.storage.sync.get(["home"], (data) => {
+            if (data.home) {
+                window.location.href = data.home;
+            } else {
+                window.location.href = "https://google.com";
+            }
+        });
     };
 
     panel.appendChild(button_home);

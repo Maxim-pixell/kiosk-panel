@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Kiosk buttons",
-  "version": "1.0",
+  "version": "1.1",
+  "options_page": "options.html",
   "description": "Navigation buttons for kiosok mode",
   "permissions": [
     "activeTab",
     "tabs",
-    "*://*/*"
+    "*://*/*",
+    "storage"
   ],
   "optional_permissions": [
     "*://*/*"
@@ -17,7 +19,8 @@
       "js": ["content.js"],
       "css": ["style.css"],
       "all_frames": true,
-      "match_origin_as_fallback": true
+      "match_origin_as_fallback": true,
+      "run_at": "document_start"
     }
   ],
   "browser_specific_settings": {
