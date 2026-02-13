@@ -1,10 +1,15 @@
+const storageAPI =
+    (typeof browser !== "undefined" && browser.storage)
+    ? browser.storage
+    : chrome.storage;
+
 const input = document.getElementById("home");
 const save = document.getElementById("save");
 
-chrome.storage.sync.get(["home"], (data) => {
+storageAPI.sync.get(["home"], (data) => {
     if (data.home) input.value = data.home;
 });
 
 save.onclick = () => {
-    chrome.storage.sync.set({ home: input.value });
+    storageAPI.sync.set({ home: input.value });
 };

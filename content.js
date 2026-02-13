@@ -1,11 +1,11 @@
-const HOME_PAGES = {
-    chrome: "https://google.com",
-    yandex: "https://yandex.ru",
-    edge: "https://bing.com"
-};
+const storageAPI =
+    (typeof browser !== "undefined" && browser.storage)
+    ? browser.storage
+    : chrome.storage;
 
 function isFullscreen() {
-    return window.innerHeight === screen.height;
+    return document.fullscreenElement != null
+    || window.innerHeight === screen.height;
 }
 
 function createPanel() {
@@ -15,7 +15,7 @@ function createPanel() {
 
     const panel = document.createElement("div");
     panel.id = "kiosk-panel";
-    document.body.appendChild(panel);
+    document.documentElement.appendChild(panel);
 
     // Кнопка - Назад
     const button_back = document.createElement("button");
@@ -28,12 +28,11 @@ function createPanel() {
     button_home.textContent = "🏠︎";
     
     button_home.onclick = ()  => {
-        chrome.storage.sync.get(["home"], (data) => {
-            if (data.home) {
-                window.location.href = data.home;
-            } else {
-                window.location.href = "https://google.com";
-            }
+        storageAPI.sync.get(["home"], (data) => {
+
+            const url = data.home || "https://google.com";
+            
+            window.location.href = url
         });
     };
 
@@ -73,11 +72,6 @@ function removePanel() {
     if (panel) panel.remove();
 }
 
-//Проверка на fullscreen
-setInterval(() => {
-    if (isFullscreen()) {
-        createPanel();
-    } else {
-        removePanel();
-    }
-}, 500);
+window.addEventListener("load", () => {
+    createPanel();
+});
